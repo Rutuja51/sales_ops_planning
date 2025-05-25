@@ -2,47 +2,57 @@
     --navy-blue: #001f3f;
     --light-navy: #003366;
     --gold-accent: #FFD700;
-    --light-blue: rgb(126 209 235);
+    --light-blue: rgb(35, 32, 48);
+    --grey: rgb(39, 35, 50);
+    --danger: rgb(182, 22, 76);
+    --sucsess: rgb(37, 133, 37);
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.font-28{
+.font-28 {
     font-size: 28px;
 }
-.font-24{
+
+.font-24 {
     font-size: 24px;
 }
-.font-20{
+
+.font-20 {
     font-size: 20px;
 }
-.font-18{
+
+.font-18 {
     font-size: 18px;
 }
-.font-16{
+
+.font-16 {
     font-size: 16px;
 }
-.font-14{
+
+.font-14 {
     font-size: 14px;
 }
-.font-12{
+
+.font-12 {
     font-size: 12px;
 }
-.font-10{
+
+.font-10 {
     font-size: 10px;
 }
 
-.font-400{
+.font-400 {
     font-weight: 400;
 }
 
-.font-500{
+.font-500 {
     font-weight: 500;
 }
 
-.font-600{
+.font-600 {
     font-weight: 600;
 }
 
@@ -72,6 +82,7 @@ body {
 .text-navy {
     color: var(--navy-blue);
 }
+
 .logo-text {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     size: 22px;
@@ -170,20 +181,220 @@ section h2::after {
 /*Index and routing page styling*/
 
 /*Contact US page styling*/
-        .contact-hero {
-          /*  background-color: var(--navy-blue);*/
-            color: var(--light-navy);
-        }
-        .person-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 24px;
-            color: var(--light-navy);
-        }
-/*Contact US page styling*/
+.contact-hero {
+    /*  background-color: var(--navy-blue);*/
+    color: var(--light-navy);
+}
+
+.person-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: var(--light-navy);
+}
+
+/*Contact US page styling ends here*/
+
+/*Order list Page styling starts here*/
+
+.table-container {
+    max-height: 540px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.table-responsive {
+    max-height: 540px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table thead {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* Ensure header stays above scrolling content */
+}
+
+.table thead th {
+    background-color: var(--light-navy);
+    color: white;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    vertical-align: middle;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.table tbody tr {
+
+    color: var(--grey);
+}
+
+/* Rest of your existing styles */
+
+.table tbody tr:hover {
+    background-color: #a3cbf3;
+}
+
+.scrollable-cell {
+    max-width: 200px;
+    /* Visible column width */
+    width: 200px;
+    /* Fixed visible width */
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scrollable-cell::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable-cell-content {
+    min-width: 100%;
+    /* At least fill the visible cell */
+    display: inline-block;
+    padding-right: 150px;
+    /* Extra scrollable space */
+    box-sizing: content-box;
+}
+
+.scrollable-cell::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.scrollable-cell:hover::-webkit-scrollbar-thumb {
+    background-color: #666;
+}
+
+.btn-xs {
+    padding: 0.1rem 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+.scrollable-cell {
+    max-width: 150px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Thin scrollbar styling */
+.table-container::-webkit-scrollbar {
+    width: 4px;
+    /* Makes the vertical scrollbar thinner */
+    height: 4px;
+    /* Makes the horizontal scrollbar thinner (if needed) */
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: var(--light-navy);
+    border-radius: 2px;
+}
+
+.table-responsive::-webkit-scrollbar{
+     width: 4px;
+    /* Makes the vertical scrollbar thinner */
+    height: 4px;
+}
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: var(--light-navy);
+    border-radius: 2px;
+}
+
+
+/*button styles*/
+/* Icon-only buttons */
+
+/* Button styles */
+.btn-icon {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.25rem !important;
+    font-size: 0.9rem !important;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.view-btn {
+    color: var(--navy-blue)
+}
+
+.edit-btn {
+    color: var(--sucsess);
+}
+
+.delete-btn {
+    color: var(--danger);
+}
+
+.view-btn:hover {
+    color: #003366 !important;
+    /* Slightly lighter navy blue */
+    background: transparent !important;
+}
+
+/* Remove focus outline */
+.btn-icon:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Pagination active color */
+.page-item.active .page-link {
+    background-color: #001f3f !important;
+    border-color: #001f3f !important;
+}
+
+.page-link {
+    color: #001f3f !important;
+}
+
+.page-item.active .page-link {
+    color: white !important;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        height: 400px;
+    }
+
+    .table thead th {
+        padding: 0.75rem;
+    }
+
+    .btn-icon {
+        padding: 0.15rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* For Firefox 
+    .table-container {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }*/
+/*Order list page styling ends here*/
