@@ -1,19 +1,21 @@
+
+import { get_contact_data } from './contact.js';
 // Add active class to current page
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
-            const currentPage = window.location.pathname.split('/').pop();
-            
+            const currentPage = window.location.pathname.split('/').pop(); 
             navLinks.forEach(link => {
                 const linkPage = link.getAttribute('href').split('/').pop();
                 if (currentPage === linkPage || 
                    (currentPage === '' && linkPage === 'index.html')) {
                     link.classList.add('active');
                 }
+            
             });
+            
         });
 
 // Implementing navigation with javascript
-
 document.getElementById('list_page').addEventListener('click', function() {
     fetch('../pages/order_list.html')
       .then(response => response.text())
@@ -52,14 +54,9 @@ document.getElementById('contact_page').addEventListener('click', function() {
       .then(response => response.text())
       .then(html => {
         document.getElementById('contentArea').innerHTML = html;
+        get_contact_data();
       })
       .catch(err => {
         console.error('Failed to load page: ', err);
       });
   });
-
-
-/*$('#about_page').click(function() {
-    console.log('hi');
-  $('#contentArea').load('README.md');
-});*/
