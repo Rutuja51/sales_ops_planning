@@ -377,6 +377,13 @@ section h2::after {
     color: white !important;
 }
 
+.bg_primary{
+    background-color: var(--navy-blue) !important;
+}
+.modal {
+    display: flex !important;
+    align-items: center;
+  }
 @media (max-width: 768px) {
     .table-container {
         height: 400px;

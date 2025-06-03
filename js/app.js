@@ -1,9 +1,9 @@
 
 import { get_contact_data } from './contact.js';
 import { renderTable } from './order.js';
-import { viewItem } from './order.js';
-import { editItem } from './order.js';
-import { deleteItem } from './order.js';
+//import { viewItem } from './order.js';
+//import { editItem } from './order.js';
+//import { deleteItem } from './order.js';
 
 // Add active class to current page
 document.addEventListener('DOMContentLoaded', function () {
@@ -27,6 +27,13 @@ document.getElementById('list_page').addEventListener('click', function () {
     .then(html => {
       document.getElementById('contentArea').innerHTML = html;
       renderTable();
+      /*document.getElementById('contentArea').addEventListener('click', function(e) {
+        if (e.target.classList.contains('view-btn')) {
+          const index = e.target.dataset.index;
+          viewItem(index); // This will now work if order.js is properly loaded
+        }
+      });*/
+      
     })
     .catch(err => {
       console.error('Failed to load page: ', err);
@@ -66,3 +73,7 @@ document.getElementById('contact_page').addEventListener('click', function () {
       console.error('Failed to load page: ', err);
     });
 });
+
+    
+    //alert(`Viewing: ${JSON.stringify(tableData[index])}`);
+

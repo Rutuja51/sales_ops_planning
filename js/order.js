@@ -4,17 +4,17 @@ const tableData = [
         date: '2023-01-01',
         customer_name: 'John Doe Corporation with a very long name that might need horizontal scrolling',
         AVV: 'AVV-001',
-        Material_Type: 'Steel',
-        Quantity: 100,
-        Unit: 'kg'
+        material_Type: 'Steel',
+        quantity: 100,
+        unit: 'kg'
     },
     {
         date: '2023-01-02',
         customer_name: 'Jane Smith Industries',
         AVV: 'AVV-002',
-        Material_Type: 'Aluminum',
-        Quantity: 50,
-        Unit: 'kg'
+        material_Type: 'Aluminum',
+        quantity: 50,
+        unit: 'kg'
     },
     // Add more sample data here...
     // In a real application, you would have 100+ entries
@@ -26,9 +26,9 @@ for (let i = 3; i <= 100; i++) {
         date: `2023-01-${i < 10 ? '0' + i : i}`,
         customer_name: `Customer ${i}`,
         AVV: `AVV-${i < 10 ? '00' + i : i < 100 ? '0' + i : i}`,
-        Material_Type: i % 2 === 0 ? 'Steel' : 'Aluminum',
-        Quantity: Math.floor(Math.random() * 100) + 1,
-        Unit: i % 3 === 0 ? 'kg' : i % 3 === 1 ? 'lb' : 'pieces'
+        material_Type: i % 2 === 0 ? 'Steel' : 'Aluminum',
+        quantity: Math.floor(Math.random() * 100) + 1,
+        unit: i % 3 === 0 ? 'kg' : i % 3 === 1 ? 'lb' : 'pieces'
     });
 }
 
@@ -41,9 +41,9 @@ function generateTableRows(data) {
             <!--<td><span class="text-truncate-150" title="${item.customer_name}">${item.customer_name}</span></td>-->
             <td><div class="scrollable-cell"><div class="scrollable-cell-content text-truncate-150">${item.customer_name}</div></div></td>
             <td>${item.AVV}</td>
-            <td>${item.Material_Type}</td>
-            <td>${item.Quantity}</td>
-            <td>${item.Unit}</td>
+            <td>${item.material_Type}</td>
+            <td>${item.quantity}</td>
+            <td>${item.unit}</td>
             <td>
                 <button class="btn-icon view-btn" onclick="viewItem(${index})" title="View">
                     <i class="fas fa-eye"></i>
@@ -60,9 +60,16 @@ function generateTableRows(data) {
 }
 
 // Action functions
-export function viewItem(index) {
+/*export function viewItem(index) {
     console.log('View item:', tableData[index]);
     alert(`Viewing: ${JSON.stringify(tableData[index])}`);
+}*/
+
+window.viewItem = function (index) {
+    console.log(index)
+    let obj=tableData[index]
+    showItemPopup(obj);
+
 }
 
 export function editItem(index) {
@@ -82,7 +89,40 @@ export function renderTable() {
     document.getElementById('tableBody').innerHTML = generateTableRows(tableData);
 }
 
-// Initialize the table when the page loads
-//document.addEventListener('DOMContentLoaded', () => {
-//    renderTable();
-//});
+function showItemPopup(item) {
+    // Get modal elements
+    const modal = new bootstrap.Modal(document.getElementById('itemModal'));
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    // Set dynamic content
+    modalTitle.textContent = 'Item Details';
+
+    // Create HTML content - customize as needed
+    modalBody.innerHTML = `
+    <div class="row">
+      <div class="col-4 font-500 font-16">Date:</div>
+      <div class="col-8 font-14">${item.date}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Customer Name:</div>
+      <div class="col-8 font-14">${item.customer_name}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">AVV:</div>
+      <div class="col-8 font-14">${item.AVV}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Material Type:</div>
+      <div class="col-8 font-14">${item.material_Type}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Quantity:</div>
+      <div class="col-8 font-14">${item.quantity} ${item.unit}</div>
+    </div>
+    
+  `;
+
+    // Show the modal
+    modal.show();
+}
