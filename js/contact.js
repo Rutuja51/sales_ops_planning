@@ -1,5 +1,7 @@
-
-export function get_contact_data() {
+document.addEventListener('DOMContentLoaded', function () {
+ get_contact_data();
+});
+function get_contact_data() {
     new Vue({
         el: '#primary-contact',
         data: {
@@ -34,24 +36,3 @@ export function get_contact_data() {
     });
 
 }
-
-/*
- $.ajax({
-                    url: '../json/contact.json',
-                    dataType: 'json', // Expected response type
-                    method: 'GET', // Optional (default is 'GET')
-                    success: function (response) {
-                        // Handle successful response
-                        data.push(response.contact_person);
-                        this.name = data[0]["name"];
-                        this.jd = data[0]["jd"];
-                        this.country_code = data[0]["country_code"];
-                        this.contact_no = data[0]["contact_no"];
-                        this.email = data[0]["email"];
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle errors
-                    }
-
-                });
- */

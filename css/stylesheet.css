@@ -2,7 +2,7 @@
     --navy-blue: #001f3f;
     --light-navy: #003366;
     --gold-accent: #FFD700;
-    --light-blue: rgb(35, 32, 48);
+    --light-blue: rgb(99, 208, 251);
     --grey: rgb(39, 35, 50);
     --danger: rgb(182, 22, 76);
     --sucsess: rgb(37, 133, 37);
@@ -80,7 +80,7 @@ body {
 }
 
 .text-navy {
-    color: var(--navy-blue);
+    color: var(--navy-blue) !important;
 }
 
 .logo-text {
@@ -310,11 +310,12 @@ section h2::after {
     border-radius: 2px;
 }
 
-.table-responsive::-webkit-scrollbar{
-     width: 4px;
+.table-responsive::-webkit-scrollbar {
+    width: 4px;
     /* Makes the vertical scrollbar thinner */
     height: 4px;
 }
+
 .table-responsive::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 2px;
@@ -377,13 +378,39 @@ section h2::after {
     color: white !important;
 }
 
-.bg_primary{
+.bg_primary {
     background-color: var(--navy-blue) !important;
 }
-.modal {
-    display: flex !important;
-    align-items: center;
-  }
+
+.bg_edit {
+    background-color: var(--sucsess) !important;
+}
+
+/*Oder list styling ends here*/
+
+/*Order form styling starts here*/
+.form-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0d6efd;
+}
+
+.required-field::after {
+    content: " *";
+    color: red;
+}
+
+/*Order form styling ends here*/
+
 @media (max-width: 768px) {
     .table-container {
         height: 400px;

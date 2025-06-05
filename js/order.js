@@ -6,7 +6,9 @@ const tableData = [
         AVV: 'AVV-001',
         material_Type: 'Steel',
         quantity: 100,
-        unit: 'kg'
+        unit: 'kg',
+        time_slot:"11-12",
+        Order_no:"1234"
     },
     {
         date: '2023-01-02',
@@ -14,7 +16,9 @@ const tableData = [
         AVV: 'AVV-002',
         material_Type: 'Aluminum',
         quantity: 50,
-        unit: 'kg'
+        unit: 'kg',
+        time_slot:"11-12",
+        Order_no:"1234"
     },
     // Add more sample data here...
     // In a real application, you would have 100+ entries
@@ -28,9 +32,16 @@ for (let i = 3; i <= 100; i++) {
         AVV: `AVV-${i < 10 ? '00' + i : i < 100 ? '0' + i : i}`,
         material_Type: i % 2 === 0 ? 'Steel' : 'Aluminum',
         quantity: Math.floor(Math.random() * 100) + 1,
-        unit: i % 3 === 0 ? 'kg' : i % 3 === 1 ? 'lb' : 'pieces'
+        unit: i % 3 === 0 ? 'kg' : i % 3 === 1 ? 'lb' : 'pieces',
+        time_slot:"11-12",
+        Order_no:i
     });
 }
+
+//OnLoad Function
+document.addEventListener('DOMContentLoaded', function () {
+ renderTable();
+});
 
 // Function to generate all table rows
 function generateTableRows(data) {
@@ -66,18 +77,19 @@ function generateTableRows(data) {
 }*/
 
 window.viewItem = function (index) {
-    console.log(index)
     let obj=tableData[index]
+    console.log("obj",obj);
     showItemPopup(obj);
 
 }
 
-export function editItem(index) {
+
+function editItem(index) {
     console.log('Edit item:', tableData[index]);
     alert(`Editing: ${JSON.stringify(tableData[index])}`);
 }
 
-export function deleteItem(index) {
+function deleteItem(index) {
     if (confirm('Are you sure you want to delete this item?')) {
         tableData.splice(index, 1);
         renderTable();
@@ -85,21 +97,22 @@ export function deleteItem(index) {
 }
 
 // Function to render the table
-export function renderTable() {
+function renderTable() {
     document.getElementById('tableBody').innerHTML = generateTableRows(tableData);
 }
 
 function showItemPopup(item) {
+    console.log('inside popup')
     // Get modal elements
-    const modal = new bootstrap.Modal(document.getElementById('itemModal'));
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
+    
+    //const modalTitle = document.getElementById('modalTitle');
+    //const modalBody = document.getElementById('modalBody');
 
     // Set dynamic content
-    modalTitle.textContent = 'Item Details';
+    //modalTitle.textContent = 'Item Details';
 
     // Create HTML content - customize as needed
-    modalBody.innerHTML = `
+    document.getElementById('modalContent').innerHTML = `
     <div class="row">
       <div class="col-4 font-500 font-16">Date:</div>
       <div class="col-8 font-14">${item.date}</div>
@@ -122,7 +135,8 @@ function showItemPopup(item) {
     </div>
     
   `;
-
+    //initialize model
+    const modal = new bootstrap.Modal(document.getElementById('viewModal'));
     // Show the modal
     modal.show();
 }
