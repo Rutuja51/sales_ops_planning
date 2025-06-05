@@ -1,0 +1,34 @@
+{
+  "orders": [
+    {
+      "orderNo": "ORD-1001",
+      "date": "2023-07-15",
+      "timeSlot": "Morning (9AM-12PM)",
+      "customer": "ABC Corporation",
+      "material": "Steel",
+      "avv": "AVV-2023-001",
+      "quantity": 150,
+      "unit": "kg"
+    },
+    {
+      "orderNo": "ORD-1002",
+      "date": "2023-07-16",
+      "timeSlot": "Afternoon (12PM-3PM)",
+      "customer": "XYZ Industries",
+      "material": "Aluminum",
+      "avv": "AVV-2023-002",
+      "quantity": 75,
+      "unit": "kg"
+    },
+    {
+      "orderNo": "ORD-1003",
+      "date": "2023-07-17",
+      "timeSlot": "Evening (3PM-6PM)",
+      "customer": "Smith & Co",
+      "material": "Plastic",
+      "avv": "",
+      "quantity": 200,
+      "unit": "pieces"
+    }
+  ]
+}
