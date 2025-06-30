@@ -1,1 +1,282 @@
-<h1>This is order_plan.html</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Order Plan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <script src="../js/order_form.js"></script>
+    <script src="../json/appointments.json"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add this to your CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+    .schedule-cell {
+      position: relative;
+      min-height: 60px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      font-size: 0.75em;
+      display: none;
+      cursor: pointer;
+    }
+    .schedule-cell:hover .edit-btn {
+      display: inline;
+    }
+    .week-heading {
+      background: #f5f5f5;
+      padding: 0.5em;
+      margin-top: 1em;
+    }
+    .tables-wrapper {
+      overflow-x: auto;
+    }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy sticky-top">
+        <div class="container">
+            <a class="navbar-brand font-28 text-light">S & Ops <span class="text-white">Planner</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link " id="list_page" href="./order_list.html">Order List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="planning_page" href="./order_plan.html">Planning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="order_page" href="./order_form.html">Create Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact_page" href="./order_contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+  <div class="mb-3">
+    <label>Select Year:</label>
+    <select id="yearSelect" class="form-select d-inline w-auto"></select>
+    <label class="ms-2">Select Month:</label>
+    <select id="monthSelect" class="form-select d-inline w-auto"></select>
+    <label class="ms-2">Select Week:</label>
+    <select id="weekSelect" class="form-select d-inline w-auto"></select>
+  </div>
+  
+  <div id="weeksContainer"></div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form id="editForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Schedule</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editWeek">
+        <input type="hidden" id="editTableType">
+        <input type="hidden" id="editPrevRow">
+        <input type="hidden" id="editPrevCol">
+        <div class="mb-2">
+          <label>Order:</label>
+          <input type="text" id="editOrder" class="form-control" required>
+        </div>
+        <div class="mb-2">
+          <label>Day:</label>
+          <select id="editDay" class="form-select">
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label>Date:</label>
+          <input type="date" id="editDate" class="form-control" required>
+        </div>
+        <div class="mb-2">
+          <label>Time Slot:</label>
+          <select id="editTime" class="form-select">
+            <option>08:00</option>
+            <option>09:00</option>
+            <option>10:00</option>
+            <option>11:00</option>
+            <option>12:00</option>
+            <option>13:00</option>
+            <option>14:00</option>
+            <option>15:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const scheduleData = {};
+const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+const timeSlots = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00"];
+
+// Initialize all weeks starting from January 1
+const selectedYear = new Date().getFullYear();
+const yearStart = new Date(selectedYear, 0, 1);
+
+for (let w = 1; w <= 52; w++) {
+  const start = new Date(selectedYear, 0, 1 + (w - 1) * 7);
+  const dates = Array.from({ length: 5 }, (_, i) => {
+    const d = new Date(start);
+    d.setDate(d.getDate() + i);
+    return d.toISOString().split('T')[0];
+  });
+  scheduleData[w] = {
+    dates,
+    inbound: Array.from({ length: 8 }, () => Array(5).fill("")),
+    outbound: Array.from({ length: 8 }, () => Array(5).fill(""))
+  };
+}
+
+
+// Default entries for Week 1
+scheduleData[1].inbound[2][0] = "Order A";
+scheduleData[1].inbound[3][2] = "Order B";
+scheduleData[1].outbound[1][1] = "Order C";
+scheduleData[1].outbound[5][4] = "Order D";
+
+const yearSelect = document.getElementById("yearSelect");
+const monthSelect = document.getElementById("monthSelect");
+const weekSelect = document.getElementById("weekSelect");
+const weeksContainer = document.getElementById("weeksContainer");
+
+const currentYear = new Date().getFullYear();
+for (let y=currentYear-1;y<=currentYear+1;y++) {
+  yearSelect.innerHTML += `<option ${y===currentYear?"selected":""}>${y}</option>`;
+}
+for (let m=1;m<=12;m++) {
+  monthSelect.innerHTML += `<option>${m}</option>`;
+}
+for (let w=1;w<=52;w++) {
+  weekSelect.innerHTML += `<option value="${w}">Week ${w}</option>`;
+}
+
+function buildWeeks() {
+  weeksContainer.innerHTML = "";
+  for (let w=1;w<=52;w++) {
+    const weekDiv = document.createElement("div");
+    weekDiv.id = `week-${w}`;
+    weekDiv.className="mb-4";
+    weekDiv.innerHTML = `
+      <h5 class="week-heading">Week ${w}</h5>
+      <div class="row g-3 tables-wrapper flex-nowrap">
+        <div class="col-12 col-md-6">
+          <h6>Inbound</h6>
+          ${buildTable(scheduleData[w].inbound, "Inbound", scheduleData[w].dates, w)}
+        </div>
+        <div class="col-12 col-md-6">
+          <h6>Outbound</h6>
+          ${buildTable(scheduleData[w].outbound, "Outbound", scheduleData[w].dates, w)}
+        </div>
+      </div>
+    `;
+    weeksContainer.appendChild(weekDiv);
+  }
+}
+
+function buildTable(data, tableType, dates, week) {
+  let t = `<table class="table table-bordered"><thead><tr><th>Time</th>`;
+  dates.forEach((d,i)=> t+=`<th>${days[i]}<br>${d}</th>`);
+  t+=`</tr></thead><tbody>`;
+  timeSlots.forEach((slot,rowIdx)=>{
+    t+=`<tr><td>${slot}</td>`;
+    data[rowIdx].forEach((val,colIdx)=>{
+      t+=`<td class="schedule-cell">
+        ${val}
+        <span class="edit-btn badge bg-secondary" onclick="openEditModal('${tableType}', ${week}, ${rowIdx}, ${colIdx})">Edit</span>
+      </td>`;
+    });
+    t+=`</tr>`;
+  });
+  t+=`</tbody></table>`;
+  return t;
+}
+
+let currentEdit=null;
+function openEditModal(tableType,week,row,col) {
+  const modal = new bootstrap.Modal(document.getElementById("editModal"));
+  document.getElementById("editWeek").value = week;
+  document.getElementById("editTableType").value = tableType;
+  document.getElementById("editPrevRow").value = row;
+  document.getElementById("editPrevCol").value = col;
+  document.getElementById("editOrder").value = scheduleData[week][tableType.toLowerCase()][row][col];
+  document.getElementById("editDate").value = scheduleData[week].dates[col];
+  document.getElementById("editDay").value = days[col];
+  document.getElementById("editTime").value = timeSlots[row];
+  currentEdit={week,tableType,row,col};
+  modal.show();
+}
+
+document.getElementById("editForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const w=+document.getElementById("editWeek").value;
+  const t=document.getElementById("editTableType").value.toLowerCase();
+  const dayIdx=days.indexOf(document.getElementById("editDay").value);
+  const date=document.getElementById("editDate").value;
+  const timeIdx=timeSlots.indexOf(document.getElementById("editTime").value);
+  const order=document.getElementById("editOrder").value;
+  // Clear previous
+  scheduleData[currentEdit.week][t][currentEdit.row][currentEdit.col]="";
+  // Update date
+  scheduleData[w].dates[dayIdx]=date;
+  // Put new
+  scheduleData[w][t][timeIdx][dayIdx]=order;
+  buildWeeks();
+  bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
+});
+
+[yearSelect,monthSelect,weekSelect].forEach(sel=>{
+  sel.addEventListener("change",()=>{
+    const w=+weekSelect.value;
+    document.getElementById(`week-${w}`).scrollIntoView({behavior:"smooth"});
+  });
+});
+
+// On load
+buildWeeks();
+const currentWeek=Math.ceil(((new Date()-new Date(currentYear,0,1))/86400000 + new Date().getDay())/7);
+weekSelect.value=currentWeek;
+document.getElementById(`week-${currentWeek}`).scrollIntoView({behavior:"smooth"});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <footer class="bg-navy w-100 text-white py-2 footer" style="position: fixed;bottom: 0;">
+        <div class="container text-center">
+            <p class="mb-0 font-10">&copy; COPYRIGHT 2025 ECOBAT. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
