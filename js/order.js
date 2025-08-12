@@ -62,6 +62,9 @@ function generateTableRows(data) {
                 <button class="btn-icon edit-btn" onclick="editItem(${index})" title="Edit">
                     <i class="fas fa-edit"></i>
                 </button>
+                <button class="btn-icon primary-btn" onclick="trackItem(${index})" title="Track">
+                    <i class="fas fa-cogs"></i>
+                </button>
                 <button class="btn-icon delete-btn" onclick="deleteItem(${index})" title="Delete">
                     <i class="fas fa-trash-alt"></i>
                 </button>
@@ -87,6 +90,11 @@ window.viewItem = function (index) {
 function editItem(index) {
     console.log('Edit item:', tableData[index]);
     alert(`Editing: ${JSON.stringify(tableData[index])}`);
+}
+
+function trackItem(index){
+    console.log('Track item:', tableData[index]);
+    alert(`Tracking Form: ${JSON.stringify(tableData[index])}`);
 }
 
 function deleteItem(index) {

@@ -176,7 +176,9 @@ section h2::after {
     font-size: 1.2rem;
     transition: color 0.3s;
 }
-
+.footer{
+    z-index: 9999;
+}
 
 /*Index and routing page styling*/
 
