@@ -96,7 +96,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (submit_btn_opt && submit_btn_opt.edit) {
         let orderNo = submit_btn_opt.orderNo;
         let tableData = JSON.parse(localStorage.getItem('order_data')) || [];
-        let order = tableData.find(order => order.orderNumber === orderNo);
+        let order = tableData.find(order => order.order_id === orderNo);
+        
         document.getElementById("customer").value = order.customer;
         document.getElementById("orderNumber").value = order.orderNumber;
         document.getElementById("quantity").value = order.quantity;
@@ -148,6 +149,10 @@ document.addEventListener('DOMContentLoaded', function () {
         materialsContainer.appendChild(materialItem);
     }
 
+    // For generate unique orderId 
+    function generateOrderId() {
+        return 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    }
 
     // Form submission
     const orderForm = document.getElementById('orderForm');
@@ -163,18 +168,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Collect form data
+        let order_id=generateOrderId();
+        console.log("order_id",order_id);
         const formData = {
             // date: document.getElementById('orderDate').value,
             //  timeSlots: document.getElementById('timeSlot').value.split(',').filter(Boolean),
             customer: document.getElementById('customer').value,
-            orderNumber: document.getElementById('orderNumber').value || null,
+            orderNumber: document.getElementById('orderNumber').value || "--",
             quantity: parseFloat(document.getElementById('quantity').value),
             unit: document.getElementById('unit').value,
             materials: [],
             "category": "",
             "date": "",
             "description": "",
-            "order_id": "",
+            "order_id": order_id,
             "rescheduled": false,
             "time": "",
             "title": "",
@@ -196,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let order_list = JSON.parse(localStorage.getItem('order_data')) || [];
         if (submit_btn_opt && submit_btn_opt.edit) {
             order_list.forEach((val, ind) => {
-                if (val.orderNumber === submit_btn_opt.orderNo) {
+                if (val.order_id === submit_btn_opt.orderNo) {
                     Object.assign(order_list[ind], formData);
                 }
             });

@@ -56,7 +56,7 @@ function editItem(index) {
     console.log('Edit item:', tableData[index]);
     let edit_obj = {
         "edit": true,
-        "orderNo": tableData[index]['orderNumber']
+        "orderNo": tableData[index]['order_id']
     }
     sessionStorage.setItem("orderNo", JSON.stringify(edit_obj));
     window.location.href = "order_form.html";
