@@ -5,135 +5,134 @@ document.addEventListener('DOMContentLoaded', function () {
     let events = JSON.parse(localStorage.getItem('calendarEvents')) || [];
     const rescheduleModal = new bootstrap.Modal(document.getElementById('rescheduleModal'));
 
-    // Main function to generate all weeks
+    // Main function to generate all weeks - FIXED
     function generateAllWeeks() {
-        const calendarContainer = document.getElementById('calendar-container');
-        calendarContainer.innerHTML = '';
+    const calendarContainer = document.getElementById('calendar-container');
+    calendarContainer.innerHTML = '';
 
-       // let weekStart = new Date(currentYear, 0, 1); // January 1st
-        let weekStart = new Date(currentYear, 0, 1); // Start Jan 1, no adjustment
+    const yearStart = new Date(currentYear, 0, 1);   // Jan 1
+    const yearEnd   = new Date(currentYear, 11, 31); // Dec 31
 
-        // Move to previous Sunday (but ensure we don't go into previous year)
-        /*const firstSunday = new Date(weekStart);
-        firstSunday.setDate(weekStart.getDate() - weekStart.getDay());
-        if (firstSunday.getFullYear() < currentYear) {
-            firstSunday.setDate(1); // If adjustment goes to previous year, use Jan 1st
-            firstSunday.setDate(1 - firstSunday.getDay()); // Try again
-        }
-        weekStart = firstSunday;*/
+    // Start from the first Monday ON or AFTER Jan 1 (no December rollbacks)
+    let weekStart = new Date(yearStart);
+    const day = weekStart.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+    const offsetToMonday = (8 - day) % 7; // 0 if already Monday
+    weekStart.setDate(weekStart.getDate() + offsetToMonday);
 
-        for (let week = 1; week <= 52; week++) {
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
+    let week = 1;
+    while (weekStart <= yearEnd) {
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
 
-            const weekDiv = document.createElement('div');
-            weekDiv.className = 'week-container';
+        const weekDiv = document.createElement('div');
+        weekDiv.className = 'week-container';
 
-            if (isCurrentWeek(weekStart, weekEnd)) {
-                weekDiv.id = 'current-week';
-                weekDiv.classList.add('current-week');
-            }
-
-            const weekHeader = document.createElement('div');
-            weekHeader.className = 'week-header';
-            weekHeader.innerHTML = `<h3>Week ${week} (${formatDate(weekStart)} to ${formatDate(weekEnd)})</h3>`;
-            weekDiv.appendChild(weekHeader);
-
-            // Create container for side-by-side tables
-            const tablesContainer = document.createElement('div');
-            tablesContainer.className = 'dual-tables';
-
-            // Create and add inbound table
-            const inboundTableDiv = document.createElement('div');
-            inboundTableDiv.className = 'single-table';
-            inboundTableDiv.appendChild(createWeekTable(weekStart, 'inbound'));
-            tablesContainer.appendChild(inboundTableDiv);
-
-            // Create and add outbound table
-            const outboundTableDiv = document.createElement('div');
-            outboundTableDiv.className = 'single-table';
-            outboundTableDiv.appendChild(createWeekTable(weekStart, 'outbound'));
-            tablesContainer.appendChild(outboundTableDiv);
-
-            weekDiv.appendChild(tablesContainer);
-            calendarContainer.appendChild(weekDiv);
-            weekStart.setDate(weekStart.getDate() + 7);
+        if (isCurrentWeek(weekStart, weekEnd)) {
+            weekDiv.id = 'current-week';
+            weekDiv.classList.add('current-week');
         }
 
-        setupEventListeners();
-        scrollToCurrentWeek();
+        const weekHeader = document.createElement('div');
+        weekHeader.className = 'week-header';
+        const displayEnd = weekEnd > yearEnd ? yearEnd : weekEnd;
+        weekHeader.innerHTML = `<h3>Week ${week} (${formatDate(weekStart)} to ${formatDate(displayEnd)})</h3>`;
+        weekDiv.appendChild(weekHeader);
+
+        const tablesContainer = document.createElement('div');
+        tablesContainer.className = 'dual-tables';
+
+        const inboundTableDiv = document.createElement('div');
+        inboundTableDiv.className = 'single-table';
+        inboundTableDiv.appendChild(createWeekTable(weekStart, 'inbound'));
+        tablesContainer.appendChild(inboundTableDiv);
+
+        const outboundTableDiv = document.createElement('div');
+        outboundTableDiv.className = 'single-table';
+        outboundTableDiv.appendChild(createWeekTable(weekStart, 'outbound'));
+        tablesContainer.appendChild(outboundTableDiv);
+
+        weekDiv.appendChild(tablesContainer);
+        calendarContainer.appendChild(weekDiv);
+
+        weekStart.setDate(weekStart.getDate() + 7); // next Monday
+        week++;
     }
 
-    // Keep all other functions exactly the same as before
+    setupEventListeners();
+    scrollToCurrentWeek();
+}
 
-    // Create a week table for specific category
-    // Update the createWeekTable function to exclude weekends
+
+
+    // Create a week table for specific category - FIXED to handle correct dates
     function createWeekTable(weekStart, category) {
-        const table = document.createElement('table');
-        table.className = `table table-bordered ${category}-table`;
+    const table = document.createElement('table');
+    table.className = `table table-bordered ${category}-table`;
 
-        // Create table header
-        const thead = document.createElement('thead');
+    const thead = document.createElement('thead');
 
-        // Category header row
-        const categoryRow = document.createElement('tr');
-        const categoryHeader = document.createElement('th');
-        categoryHeader.colSpan = 6; // Changed from 8 to 6 (5 weekdays + time column)
-        categoryHeader.className = 'category-header';
-        categoryHeader.textContent = `${category.charAt(0).toUpperCase() + category.slice(1)} Schedule`;
-        categoryRow.appendChild(categoryHeader);
-        thead.appendChild(categoryRow);
+    // Category header row
+    const categoryRow = document.createElement('tr');
+    const categoryHeader = document.createElement('th');
+    categoryHeader.colSpan = 6; // time + Mon..Fri
+    categoryHeader.className = 'category-header';
+    categoryHeader.textContent = `${category.charAt(0).toUpperCase() + category.slice(1)} Schedule`;
+    categoryRow.appendChild(categoryHeader);
+    thead.appendChild(categoryRow);
 
-        // Day headers row (only weekdays)
-        const dayHeaderRow = document.createElement('tr');
-        dayHeaderRow.appendChild(document.createElement('th')).className = 'time-label';
+    // Day headers row (Mon–Fri)
+    const dayHeaderRow = document.createElement('tr');
+    dayHeaderRow.appendChild(document.createElement('th')).className = 'time-label';
 
-        // Only create headers for Monday-Friday
-        for (let i = 1; i <= 5; i++) { // Start from 1 (Monday) to 5 (Friday)
-            const dayDate = new Date(weekStart);
-            dayDate.setDate(weekStart.getDate() + i + 1); // Skip Sunday (0)
+    for (let i = 1; i <= 5; i++) { // 1=Mon ... 5=Fri
+        const d = new Date(weekStart);
+        d.setDate(weekStart.getDate() + (i - 1)); // Mon..Fri in this week
 
-            const dayHeader = document.createElement('th');
-            dayHeader.className = 'day-header';
-            dayHeader.innerHTML = `${getDayName(i)}<br><span>${formatDate(dayDate)}</span>`;
-            dayHeaderRow.appendChild(dayHeader);
-        }
+        const dayHeader = document.createElement('th');
+        dayHeader.className = 'day-header';
+        const inThisYear = d.getFullYear() === currentYear;
 
-        thead.appendChild(dayHeaderRow);
-        table.appendChild(thead);
+        dayHeader.innerHTML = `${getDayName(i)}<br><span>${inThisYear ? formatDate(d) : ''}</span>`;
+        dayHeaderRow.appendChild(dayHeader);
+    }
+    thead.appendChild(dayHeaderRow);
+    table.appendChild(thead);
 
-        // Create table body with time slots
-        const tbody = document.createElement('tbody');
+    // Body with time slots
+    const tbody = document.createElement('tbody');
+    for (let hour = 8; hour <= 15; hour++) {
+        const time = `${hour}:00`;
+        const row = document.createElement('tr');
 
-        for (let hour = 8; hour <= 15; hour++) {
-            const time = `${hour}:00`;
-            const row = document.createElement('tr');
+        const timeLabelCell = document.createElement('td');
+        timeLabelCell.className = 'time-label';
+        timeLabelCell.textContent = formatTime(time);
+        row.appendChild(timeLabelCell);
 
-            // Time label cell
-            const timeLabelCell = document.createElement('td');
-            timeLabelCell.className = 'time-label';
-            timeLabelCell.textContent = formatTime(time);
-            row.appendChild(timeLabelCell);
+        for (let i = 1; i <= 5; i++) {
+            const d = new Date(weekStart);
+            d.setDate(weekStart.getDate() + (i - 1));
 
-            // Day cells (only Monday-Friday)
-            for (let day = 1; day <= 5; day++) { // Monday (1) to Friday (5)
-                const dayDate = new Date(weekStart);
-                dayDate.setDate(weekStart.getDate() + day + 1);
-                const dateStr = formatDate(dayDate);
+            const dayCell = document.createElement('td');
+            dayCell.className = 'time-slot';
 
-                const dayCell = document.createElement('td');
-                dayCell.className = 'time-slot';
+            if (d.getFullYear() !== currentYear) {
+                dayCell.classList.add('bg-light');
+                row.appendChild(dayCell);
+                continue;
+            }
 
-                // Find event for this slot and category
-                const event = events.find(e =>
-                    e.date === dateStr &&
-                    e.time === time &&
-                    e.category === category
-                );
+            const dateStr = formatDate(d);
 
-                if (event) {
-                    dayCell.classList.add('booked-slot');
-                    dayCell.innerHTML = `
+            const event = events.find(e =>
+                e.date === dateStr &&
+                e.time === time &&
+                e.category === category
+            );
+
+            if (event) {
+                dayCell.classList.add('booked-slot');
+                dayCell.innerHTML = `
                     <div class="slot-content">
                         ${event.rescheduled ? '<div class="rescheduled-flag"></div>' : ''}
                         <div>${event.title}</div>
@@ -147,27 +146,27 @@ document.addEventListener('DOMContentLoaded', function () {
                         </button>
                     </div>
                 `;
-                } else {
-                    dayCell.classList.add('available-slot');
-                    dayCell.dataset.date = dateStr;
-                    dayCell.dataset.time = time;
-                    dayCell.dataset.category = category;
-                    dayCell.innerHTML = `
+            } else {
+                dayCell.classList.add('available-slot');
+                dayCell.dataset.date = dateStr;
+                dayCell.dataset.time = time;
+                dayCell.dataset.category = category;
+                dayCell.innerHTML = `
                     <div class="slot-content">
                         <div class="available-flag"></div>
                     </div>
                 `;
-                }
-
-                row.appendChild(dayCell);
             }
 
-            tbody.appendChild(row);
+            row.appendChild(dayCell);
         }
-
-        table.appendChild(tbody);
-        return table;
+        tbody.appendChild(row);
     }
+
+    table.appendChild(tbody);
+    return table;
+}
+
 
     // Helper functions
     function isCurrentWeek(startDate, endDate) {
@@ -190,8 +189,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function formatDate(date) {
-        return date.toISOString().split('T')[0];
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
     }
+
 
     function populateTimeSelects() {
         const timeSelects = [
