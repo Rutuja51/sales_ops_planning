@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize variables
+    // clearing session storage for edit form
+    sessionStorage.removeItem('orderNo');
     const today = new Date();
     const currentYear = today.getFullYear();
     let events = JSON.parse(localStorage.getItem('calendarEvents')) || [];

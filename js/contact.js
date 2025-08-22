@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
- get_contact_data();
+    // clearing session storage for edit form
+    sessionStorage.removeItem('orderNo');
+    get_contact_data();
 });
 function get_contact_data() {
     new Vue({

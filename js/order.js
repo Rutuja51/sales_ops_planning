@@ -3,7 +3,9 @@ var tableData = JSON.parse(localStorage.getItem('order_data')) || [];
 
 //OnLoad Function
 document.addEventListener('DOMContentLoaded', function () {
- renderTable();
+    // clearing session storage for edit form
+    sessionStorage.removeItem('orderNo');
+    renderTable();
 });
 
 // Function to generate all table rows
@@ -43,8 +45,8 @@ function generateTableRows(data) {
 }*/
 
 window.viewItem = function (index) {
-    let obj=tableData[index]
-    console.log("obj",obj);
+    let obj = tableData[index]
+    console.log("obj", obj);
     showItemPopup(obj);
 
 }
@@ -52,10 +54,15 @@ window.viewItem = function (index) {
 
 function editItem(index) {
     console.log('Edit item:', tableData[index]);
-    alert(`Editing: ${JSON.stringify(tableData[index])}`);
+    let edit_obj = {
+        "edit": true,
+        "orderNo": tableData[index]['orderNumber']
+    }
+    sessionStorage.setItem("orderNo", JSON.stringify(edit_obj));
+    window.location.href = "order_form.html";
 }
 
-function trackItem(index){
+function trackItem(index) {
     console.log('Track item:', tableData[index]);
     alert(`Tracking Form: ${JSON.stringify(tableData[index])}`);
 }
@@ -75,7 +82,7 @@ function renderTable() {
 function showItemPopup(item) {
     console.log('inside popup')
     // Get modal elements
-    
+
     //const modalTitle = document.getElementById('modalTitle');
     //const modalBody = document.getElementById('modalBody');
 
@@ -103,9 +110,9 @@ function showItemPopup(item) {
     <div class="row mt-2">
       <div class="col-4 font-500 font-16">Materials:</div>
       <div class="col-8 font-14">
-        ${item.materials && item.materials.length > 0 
-          ? item.materials.map(m => `${m.name} (AVV: ${m.avv})`).join("<br>")
-          : "-"}
+        ${item.materials && item.materials.length > 0
+            ? item.materials.map(m => `${m.name} (AVV: ${m.avv})`).join("<br>")
+            : "-"}
       </div>
     <div class="row mt-2">
       <div class="col-4 font-500 font-16">Quantity:</div>
