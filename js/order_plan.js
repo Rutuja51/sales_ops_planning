@@ -6,18 +6,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const rescheduleModal = new bootstrap.Modal(document.getElementById('rescheduleModal'));
 
     // Main function to generate all weeks - FIXED
-    function generateAllWeeks() {
+function generateAllWeeks() {
     const calendarContainer = document.getElementById('calendar-container');
     calendarContainer.innerHTML = '';
 
     const yearStart = new Date(currentYear, 0, 1);   // Jan 1
     const yearEnd   = new Date(currentYear, 11, 31); // Dec 31
 
-    // Start from the first Monday ON or AFTER Jan 1 (no December rollbacks)
+    // Always start at Jan 1, no shifting to Monday
     let weekStart = new Date(yearStart);
-    const day = weekStart.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
-    const offsetToMonday = (8 - day) % 7; // 0 if already Monday
-    weekStart.setDate(weekStart.getDate() + offsetToMonday);
 
     let week = 1;
     while (weekStart <= yearEnd) {
@@ -54,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         weekDiv.appendChild(tablesContainer);
         calendarContainer.appendChild(weekDiv);
 
-        weekStart.setDate(weekStart.getDate() + 7); // next Monday
+        weekStart.setDate(weekStart.getDate() + 7); // jump to next week
         week++;
     }
 
@@ -64,8 +61,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
     // Create a week table for specific category - FIXED to handle correct dates
-    function createWeekTable(weekStart, category) {
+function createWeekTable(weekStart, category) {
     const table = document.createElement('table');
     table.className = `table table-bordered ${category}-table`;
 
@@ -86,13 +84,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     for (let i = 1; i <= 5; i++) { // 1=Mon ... 5=Fri
         const d = new Date(weekStart);
-        d.setDate(weekStart.getDate() + (i - 1)); // Mon..Fri in this week
+        // Align with Mon=1 .. Fri=5 relative to this week
+        d.setDate(weekStart.getDate() - (weekStart.getDay() === 0 ? 6 : weekStart.getDay() - 1) + (i - 1));
 
         const dayHeader = document.createElement('th');
         dayHeader.className = 'day-header';
-        const inThisYear = d.getFullYear() === currentYear;
 
-        dayHeader.innerHTML = `${getDayName(i)}<br><span>${inThisYear ? formatDate(d) : ''}</span>`;
+        if (d.getFullYear() === currentYear) {
+            dayHeader.innerHTML = `${getDayName(i)}<br><span>${formatDate(d)}</span>`;
+        } else {
+            dayHeader.innerHTML = `${getDayName(i)}<br><span></span>`;
+        }
+
         dayHeaderRow.appendChild(dayHeader);
     }
     thead.appendChild(dayHeaderRow);
@@ -111,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         for (let i = 1; i <= 5; i++) {
             const d = new Date(weekStart);
-            d.setDate(weekStart.getDate() + (i - 1));
+            d.setDate(weekStart.getDate() - (weekStart.getDay() === 0 ? 6 : weekStart.getDay() - 1) + (i - 1));
 
             const dayCell = document.createElement('td');
             dayCell.className = 'time-slot';
@@ -166,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
     table.appendChild(tbody);
     return table;
 }
+
 
 
     // Helper functions
