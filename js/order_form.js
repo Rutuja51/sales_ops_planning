@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    /*
             // Generate time slots
             const timeSlotContainer = document.getElementById('timeSlotContainer');
             const timeSlots = [];
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const selectedTimes = Array.from(selectedBadges).map(badge => badge.dataset.time);
                 document.getElementById('timeSlot').value = selectedTimes.join(',');
             }
+                */
             
             // Material management
             const materialSelect = document.getElementById('materialSelect');
@@ -94,13 +96,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Collect form data
                 const formData = {
-                    date: document.getElementById('orderDate').value,
-                    timeSlots: document.getElementById('timeSlot').value.split(',').filter(Boolean),
+                  // date: document.getElementById('orderDate').value,
+                  //  timeSlots: document.getElementById('timeSlot').value.split(',').filter(Boolean),
                     customer: document.getElementById('customer').value,
                     orderNumber: document.getElementById('orderNumber').value || null,
                     quantity: parseFloat(document.getElementById('quantity').value),
                     unit: document.getElementById('unit').value,
-                    materials: []
+                    materials: [],
+                    "category": "",
+                    "date": "",
+                    "description": "",
+                    "order_id": "",
+                    "rescheduled": false,
+                    "time": "",
+                    "title": "",
+                    scheduled:false
                 };
                 
                 // Collect materials data
@@ -116,7 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Display in console
                 console.log('Order Data:', formData);
-                
+                let order_list = JSON.parse(localStorage.getItem('order_data')) || [];
+                order_list.push(formData)
+                localStorage.setItem('order_data', JSON.stringify(order_list));
                 // Here you would typically send the data to a server
                 alert('Order data has been logged to console (check developer tools)');
             });
@@ -127,10 +139,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 orderForm.classList.remove('was-validated');
                 materialsContainer.innerHTML = '';
                 
+                /*
                 // Reset time slot badges
                 document.querySelectorAll('.time-slot-badge').forEach(badge => {
                     badge.classList.remove('bg_primary', 'text-white');
                     badge.classList.add('bg_primary', 'text-dark');
                 });
+                */
+
             });
         });

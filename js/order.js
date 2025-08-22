@@ -1,42 +1,5 @@
 // Sample data - in a real application this would come from an API or database
-const tableData = [
-    {
-        date: '2023-01-01',
-        customer_name: 'John Doe Corporation with a very long name that might need horizontal scrolling',
-        AVV: 'AVV-001',
-        material_Type: 'Steel',
-        quantity: 100,
-        unit: 'kg',
-        time_slot:"11-12",
-        Order_no:"1234"
-    },
-    {
-        date: '2023-01-02',
-        customer_name: 'Jane Smith Industries',
-        AVV: 'AVV-002',
-        material_Type: 'Aluminum',
-        quantity: 50,
-        unit: 'kg',
-        time_slot:"11-12",
-        Order_no:"1234"
-    },
-    // Add more sample data here...
-    // In a real application, you would have 100+ entries
-];
-
-// Generate 100 sample entries if needed
-for (let i = 3; i <= 100; i++) {
-    tableData.push({
-        date: `2023-01-${i < 10 ? '0' + i : i}`,
-        customer_name: `Customer ${i}`,
-        AVV: `AVV-${i < 10 ? '00' + i : i < 100 ? '0' + i : i}`,
-        material_Type: i % 2 === 0 ? 'Steel' : 'Aluminum',
-        quantity: Math.floor(Math.random() * 100) + 1,
-        unit: i % 3 === 0 ? 'kg' : i % 3 === 1 ? 'lb' : 'pieces',
-        time_slot:"11-12",
-        Order_no:i
-    });
-}
+var tableData = JSON.parse(localStorage.getItem('order_data')) || [];
 
 //OnLoad Function
 document.addEventListener('DOMContentLoaded', function () {
@@ -48,11 +11,11 @@ function generateTableRows(data) {
     return data.map((item, index) => `
         <tr>
             <td>${index + 1}</td>
-            <td>${item.date}</td>
-            <!--<td><span class="text-truncate-150" title="${item.customer_name}">${item.customer_name}</span></td>-->
-            <td><div class="scrollable-cell"><div class="scrollable-cell-content text-truncate-150">${item.customer_name}</div></div></td>
-            <td>${item.AVV}</td>
-            <td>${item.material_Type}</td>
+            <td>${item.orderNumber}</td>
+            <!--<td><span class="text-truncate-150" title="${item.customer}">${item.customer}</span></td>-->
+            <td><div class="scrollable-cell"><div class="scrollable-cell-content text-truncate-150">${item.customer}</div></div></td>
+            <td>${item.materials[0].avv}</td>
+            <td>${item.materials[0].name}</td>
             <td>${item.quantity}</td>
             <td>${item.unit}</td>
             <td>
@@ -123,20 +86,27 @@ function showItemPopup(item) {
     document.getElementById('modalContent').innerHTML = `
     <div class="row">
       <div class="col-4 font-500 font-16">Date:</div>
-      <div class="col-8 font-14">${item.date}</div>
+      <div class="col-8 font-14">Not yet scheduled</div>
+    </div>
+    <div class="row">
+      <div class="col-4 font-500 font-16">Time Slote:</div>
+      <div class="col-8 font-14">Not yet scheduled</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">order Number</div>
+      <div class="col-8 font-14">${item.orderNumber}</div>
     </div>
     <div class="row mt-2">
       <div class="col-4 font-500 font-16">Customer Name:</div>
-      <div class="col-8 font-14">${item.customer_name}</div>
+      <div class="col-8 font-14">${item.customer}</div>
     </div>
     <div class="row mt-2">
-      <div class="col-4 font-500 font-16">AVV:</div>
-      <div class="col-8 font-14">${item.AVV}</div>
-    </div>
-    <div class="row mt-2">
-      <div class="col-4 font-500 font-16">Material Type:</div>
-      <div class="col-8 font-14">${item.material_Type}</div>
-    </div>
+      <div class="col-4 font-500 font-16">Materials:</div>
+      <div class="col-8 font-14">
+        ${item.materials && item.materials.length > 0 
+          ? item.materials.map(m => `${m.name} (AVV: ${m.avv})`).join("<br>")
+          : "-"}
+      </div>
     <div class="row mt-2">
       <div class="col-4 font-500 font-16">Quantity:</div>
       <div class="col-8 font-14">${item.quantity} ${item.unit}</div>
