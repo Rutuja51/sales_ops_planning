@@ -10,15 +10,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const calendarContainer = document.getElementById('calendar-container');
         calendarContainer.innerHTML = '';
 
-        let weekStart = new Date(currentYear, 0, 1); // January 1st
+       // let weekStart = new Date(currentYear, 0, 1); // January 1st
+        let weekStart = new Date(currentYear, 0, 1); // Start Jan 1, no adjustment
+
         // Move to previous Sunday (but ensure we don't go into previous year)
-        const firstSunday = new Date(weekStart);
+        /*const firstSunday = new Date(weekStart);
         firstSunday.setDate(weekStart.getDate() - weekStart.getDay());
         if (firstSunday.getFullYear() < currentYear) {
             firstSunday.setDate(1); // If adjustment goes to previous year, use Jan 1st
             firstSunday.setDate(1 - firstSunday.getDay()); // Try again
         }
-        weekStart = firstSunday;
+        weekStart = firstSunday;*/
 
         for (let week = 1; week <= 52; week++) {
             const weekEnd = new Date(weekStart);
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dayHeaderRow.appendChild(document.createElement('th')).className = 'time-label';
 
         // Only create headers for Monday-Friday
-        for (let i = 1; i < 5; i++) { // Start from 1 (Monday) to 5 (Friday)
+        for (let i = 1; i <= 5; i++) { // Start from 1 (Monday) to 5 (Friday)
             const dayDate = new Date(weekStart);
             dayDate.setDate(weekStart.getDate() + i + 1); // Skip Sunday (0)
 
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
             row.appendChild(timeLabelCell);
 
             // Day cells (only Monday-Friday)
-            for (let day = 1; day < 5; day++) { // Monday (1) to Friday (5)
+            for (let day = 1; day <= 5; day++) { // Monday (1) to Friday (5)
                 const dayDate = new Date(weekStart);
                 dayDate.setDate(weekStart.getDate() + day + 1);
                 const dateStr = formatDate(dayDate);
