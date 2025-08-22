@@ -219,6 +219,7 @@ function createWeekTable(weekStart, category) {
     }
 
     function saveEvents() {
+        console.log("events",events)
         localStorage.setItem('calendarEvents', JSON.stringify(events));
     }
 
@@ -273,7 +274,8 @@ function createWeekTable(weekStart, category) {
             date: document.getElementById('event-date').value,
             time: document.getElementById('event-time').value,
             category: document.getElementById('event-category').value,
-            rescheduled: false
+            rescheduled: false,
+            order_id: ""
         };
 
         // Validate slot availability
@@ -342,7 +344,7 @@ function createWeekTable(weekStart, category) {
             date: newData.date,
             time: newData.time,
             category: newData.category,
-            rescheduled: true
+            rescheduled: true,
         };
 
         saveEvents();
