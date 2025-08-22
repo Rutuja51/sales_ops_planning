@@ -277,7 +277,8 @@ function createWeekTable(weekStart, category) {
             time: document.getElementById('event-time').value,
             category: document.getElementById('event-category').value,
             rescheduled: false,
-            order_id: ""
+            order_id: "",
+            orderNumber:""
         };
 
         // Validate slot availability
