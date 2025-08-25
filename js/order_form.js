@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
         
         validateMaterials();
     });*/
+
+    if(addMaterialBtn){
     addMaterialBtn.addEventListener('click', function () {
         const selectedMaterial = materialSelect.value;
         if (!selectedMaterial) return;
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
         materialSelect.value = "";
         validateMaterials();
     });
-
+    }
     function validateMaterials() {
         const hasMaterials = materialsContainer.children.length > 0;
         document.getElementById('materialsContainer').classList.toggle('is-invalid', !hasMaterials);
@@ -174,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // date: document.getElementById('orderDate').value,
             //  timeSlots: document.getElementById('timeSlot').value.split(',').filter(Boolean),
             customer: document.getElementById('customer').value,
-            orderNumber: document.getElementById('orderNumber').value || "--",
+            orderNumber: document.getElementById('orderNumber').value || "",
             quantity: parseFloat(document.getElementById('quantity').value),
             unit: document.getElementById('unit').value,
             materials: [],

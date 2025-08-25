@@ -1,5 +1,13 @@
 // Sample data - in a real application this would come from an API or database
-var tableData = JSON.parse(localStorage.getItem('order_data')) || [];
+let order_data=JSON.parse(localStorage.getItem('order_data')) || [];
+var tableData = [];
+order_data.map(data=>{
+    if(!data.scheduled && !data.rescheduled)
+        tableData.push(data)
+});
+
+
+
 
 //OnLoad Function
 document.addEventListener('DOMContentLoaded', function () {
@@ -27,7 +35,7 @@ function generateTableRows(data) {
                 <button class="btn-icon edit-btn" onclick="editItem(${index})" title="Edit">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn-icon primary-btn" onclick="trackItem(${index})" title="Track">
+                <button class="btn-icon primary-btn" onclick="planItem(${index})" title="Plan">
                     <i class="fas fa-cogs"></i>
                 </button>
                 <button class="btn-icon delete-btn" onclick="deleteItem(${index})" title="Delete">
@@ -56,12 +64,23 @@ function editItem(index) {
     console.log('Edit item:', tableData[index]);
     let edit_obj = {
         "edit": true,
+        "plan":false,
         "orderNo": tableData[index]['order_id']
     }
     sessionStorage.setItem("orderNo", JSON.stringify(edit_obj));
     window.location.href = "order_form.html";
 }
-
+function planItem(index) {
+    console.log('Edit item:', tableData[index]);
+    let plan_obj = {
+        "edit": false,
+        "plan":true,
+        "orderid": tableData[index]['order_id'],
+        "orderNo": tableData[index]['orderNumber']
+    }
+    sessionStorage.setItem("orderNo_plan", JSON.stringify(plan_obj));
+    window.location.href = "planning_form.html";
+}
 function trackItem(index) {
     console.log('Track item:', tableData[index]);
     alert(`Tracking Form: ${JSON.stringify(tableData[index])}`);
