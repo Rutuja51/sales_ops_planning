@@ -2,18 +2,6 @@
 let events = JSON.parse(localStorage.getItem('calendarEvents')) || [];
 let currentYear = new Date().getFullYear();
 
-
-document.addEventListener('DOMContentLoaded', function (){
-    const order_plan = JSON.parse(sessionStorage.getItem("orderNo_plan"));
-    if (order_plan && order_plan.plan) {
-        let orderNo = order_plan.orderNo;
-        let tableData = JSON.parse(localStorage.getItem('order_data')) || [];
-        let order = tableData.find(order => order.orderNumber === orderNo);
-        document.getElementById("event-order-No").value = orderNo;
-    }
-});
-
-
 // Helper functions
 function formatTime(time) {
     const [hour, minute] = time.split(':');
@@ -65,7 +53,6 @@ function populateTimeSelects() {
 }
 
 function saveEvents() {
-   
     localStorage.setItem('calendarEvents', JSON.stringify(events));
 }
 
@@ -202,7 +189,7 @@ function createWeekTable(weekStart, category) {
             const event = events.find(e =>
                 e.date === dateStr &&
                 e.time === time &&
-                e.category === category 
+                e.category === category
             );
 
             if (event) {
@@ -216,9 +203,7 @@ function createWeekTable(weekStart, category) {
                                 data-time="${time}"
                                 data-category="${category}"
                                 data-title="${event.title}"
-                                data-desc="${event.description}"
-                                data-order-number="${event.orderNumber || ''}"
-                                data-order-id="${event.order_id || ''}">
+                                data-desc="${event.description}">
                             Reschedule
                         </button>
                     </div>
@@ -263,16 +248,13 @@ function setupEventListeners() {
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
             const data = this.dataset;
-            let order_plan = JSON.parse(sessionStorage.getItem("orderNo_plan"));
-            console.log("data",data);
+
             document.getElementById('original-date').value = data.date;
             document.getElementById('original-time').value = data.time;
             document.getElementById('original-category').value = data.category;
             document.getElementById('reschedule-date').value = data.date;
             document.getElementById('reschedule-category').value = data.category;
-            //document.getElementById('event-order-No-reschedule').value = data.orderNumber;
-            document.getElementById('event-order-No-reschedule').value = data.orderNumber || '';
-           // document.getElementById('event-order-id-reschedule').value = data.orderId || '';
+
             const timeSelect = document.getElementById('reschedule-time');
             timeSelect.value = data.time;
             
@@ -300,7 +282,7 @@ function setupScheduleForm() {
     
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        const order_plan = JSON.parse(sessionStorage.getItem("orderNo_plan"));
+
         const formData = {
             title: document.getElementById('event-title').value,
             description: document.getElementById('event-description').value,
@@ -308,9 +290,8 @@ function setupScheduleForm() {
             time: document.getElementById('event-time').value,
             category: document.getElementById('event-category').value,
             rescheduled: false,
-            scheduled:true,
-            order_id: order_plan?.orderid,
-            orderNumber: order_plan?.orderNo
+            order_id: "",
+            orderNumber: ""
         };
 
         // Validate slot availability
@@ -325,22 +306,11 @@ function setupScheduleForm() {
             return;
         }
 
-        let order_list = JSON.parse(localStorage.getItem('order_data')); 
-        console.log('form,data',formData)
-        order_list.map((data,ind)=>{
-                if(data.order_id===formData.order_id){
-                    console.log('hi')
-                order_list[ind].rescheduled=false;
-                order_list[ind].scheduled=true;
-
-            }    
-        });
-        localStorage.setItem('order_data', JSON.stringify(order_list));
         events.push(formData);
         saveEvents();
 
         alert('Event scheduled successfully!');
-        window.location.href = 'order_plan.html';
+        window.location.href = 'index.html';
     });
 }
 
@@ -348,22 +318,18 @@ function setupScheduleForm() {
 function setupRescheduleHandler() {
     const confirmBtn = document.getElementById('confirm-reschedule');
     if (!confirmBtn) return;
-    let order_plan = JSON.parse(sessionStorage.getItem("orderNo_plan"));
+    
     confirmBtn.addEventListener('click', function () {
         const originalData = {
             date: document.getElementById('original-date').value,
             time: document.getElementById('original-time').value,
-            category: document.getElementById('original-category').value,
-            orderNumber: document.getElementById('event-order-No-reschedule').value,
-            orderId: order_plan.orderid
+            category: document.getElementById('original-category').value
         };
 
         const newData = {
             date: document.getElementById('reschedule-date').value,
             time: document.getElementById('reschedule-time').value,
-            category: document.getElementById('reschedule-category').value,
-            orderNumber: document.getElementById('event-order-No-reschedule').value,
-           orderId: order_plan.orderid
+            category: document.getElementById('reschedule-category').value
         };
 
         // Find the event to reschedule
@@ -392,35 +358,14 @@ function setupRescheduleHandler() {
         }
 
         // Update event
-        console.log("newData",newData)
         events[eventIndex] = {
             ...events[eventIndex],
             date: newData.date,
             time: newData.time,
             category: newData.category,
             rescheduled: true,
-            orderNumber: document.getElementById('event-order-No-reschedule').value
         };
 
-        let order_list = JSON.parse(localStorage.getItem('order_data'));
-
-        console.log('order',order_list)
-        console.log('events',events)
-        
-        
-        order_list.map((data,ind)=>{
-            events.map((event_data,ind1)=>{
-                if(data.order_id===event_data.order_id){
-                order_list[ind].orderNumber=event_data.orderNumber;
-                order_list[ind].rescheduled=true;
-                order_list[ind].scheduled=true;
-
-            }
-            })   
-        });
-        
-
-        localStorage.setItem('order_data', JSON.stringify(order_list));
         saveEvents();
         
         const rescheduleModal = bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'));
