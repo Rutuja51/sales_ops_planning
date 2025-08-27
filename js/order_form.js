@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         // Save updated list
         localStorage.setItem('order_data', JSON.stringify(order_list));
-        alert('Order data has been logged to console (check developer tools)');
+        alert('Order is created');
 
         // Navigate after saving
         window.location.href = "order_list.html";

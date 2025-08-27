@@ -12,13 +12,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
- <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+  <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>-->
- 
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Add this to your CSS -->
@@ -35,7 +35,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link " id="list_page" href="./order_list.html">Order List</a>
+            <a class="nav-link " id="list_page" href="./scheduled_order_list.html">Scheduled Order List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="list_page" href="./order_list.html">Order List</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" id="planning_page" href="./order_plan.html">Planning</a>
@@ -75,23 +78,23 @@
       </div>
     </div>
   </div>
-   <div class="modal fade" id="viewModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg_primary text-white">
-                    <h5 class="modal-title">Order Details</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="modalContent">
-                    <!-- Content will be inserted here by JavaScript -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary bg_primary" data-bs-dismiss="modal">Close</button>
-                   <!-- <button type="button" class="btn btn-secondary bg_edit" data-bs-dismiss="modal">Edit</button>-->
-                </div>
-            </div>
+  <div class="modal fade" id="viewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg_primary text-white">
+          <h5 class="modal-title">Order Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body" id="modalContent">
+          <!-- Content will be inserted here by JavaScript -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary bg_primary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-secondary bg_edit" data-bs-dismiss="modal">Edit</button>-->
+        </div>
+      </div>
     </div>
+  </div>
   <!-- Footer -->
   <footer class="bg-navy w-100 text-white py-2" style="position: fixed;bottom: 0;">
     <div class="container text-center">
