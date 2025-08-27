@@ -87,9 +87,19 @@ function trackItem(index) {
 }
 
 function deleteItem(index) {
+   
     if (confirm('Are you sure you want to delete this item?')) {
-        tableData.splice(index, 1);
-        renderTable();
+        let order_data = JSON.parse(localStorage.getItem('order_data')) || [];
+        order_data.map((event, ind) => {
+            if (event.order_id === tableData[index]?.order_id) {
+                order_data.splice(ind, 1);
+                 
+            }     
+            localStorage.setItem('order_data', JSON.stringify(order_data));
+        })
+        alert('Order is Deleted.');
+        window.location.href = "order_list.html";
+        
     }
 }
 

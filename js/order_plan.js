@@ -329,7 +329,7 @@ function setupScheduleForm() {
         console.log('form,data',formData)
         order_list.map((data,ind)=>{
                 if(data.order_id===formData.order_id){
-                    console.log('hi')
+                
                 order_list[ind].rescheduled=false;
                 order_list[ind].scheduled=true;
 
@@ -414,6 +414,9 @@ function setupRescheduleHandler() {
                 order_list[ind].orderNumber=event_data.orderNumber;
                 order_list[ind].rescheduled=true;
                 order_list[ind].scheduled=true;
+                order_list[ind].date=newData.date;
+                order_list[ind].time=newData.time;
+
 
             }
             })   
