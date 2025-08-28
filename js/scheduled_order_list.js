@@ -19,6 +19,8 @@ function generateTableRows(data) {
         <tr>
             <td>${index + 1}</td>
             <td>${item.orderNumber}</td>
+            <td>${item.date}</td>
+            <td>${item.time}</td>
             <!--<td><span class="text-truncate-150" title="${item.customer}">${item.customer}</span></td>-->
             <td><div class="scrollable-cell"><div class="scrollable-cell-content text-truncate-150">${item.customer}</div></div></td>
             <td>${item.materials[0].avv}</td>

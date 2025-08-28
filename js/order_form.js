@@ -136,9 +136,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <button type="button" class="btn-close" aria-label="Remove"></button>
                 </div>
                 <div class="mb-2">
-                    <label for="avv-${name}" class="form-label">AVV (for ${name})</label>
+                    <label for="avv \\ Material \\ UN No. -${name}" class="form-label">AVV \\ Material \\ UN No. (for ${name})</label>
                     <input type="text" class="form-control avv-input" id="avv-${name}" 
-                        placeholder="Enter AVV for ${name}" value="${avv}">
+                        placeholder="Enter AVV \\ Material \\ UN No.  for ${name}" value="${avv}">
                 </div>
             `;
 
