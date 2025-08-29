@@ -416,8 +416,8 @@ function setupRescheduleHandler() {
                 order_list[ind].orderNumber=event_data.orderNumber;
                 order_list[ind].rescheduled=true;
                 order_list[ind].scheduled=true;
-                order_list[ind].date=newData.date;
-                order_list[ind].time=newData.time;
+                order_list[ind].date=event_data.date;
+                order_list[ind].time=event_data.time;
 
 
             }
