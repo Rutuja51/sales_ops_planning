@@ -332,6 +332,8 @@ function setupScheduleForm() {
                 
                 order_list[ind].rescheduled=false;
                 order_list[ind].scheduled=true;
+                order_list[ind].date=formData.date;
+                order_list[ind].time=formData.time;
 
             }    
         });
