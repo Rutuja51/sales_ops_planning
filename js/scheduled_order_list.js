@@ -101,14 +101,55 @@ function showItemPopup(item) {
     </div>
     <div class="row mt-2">
       <div class="col-4 font-500 font-16">Materials:</div>
-      <div class="col-8 font-14">
-        ${item.materials && item.materials.length > 0
-      ? item.materials.map(m => `${m.name} (AVV: ${m.avv})`).join("<br>")
-      : "-"}
-      </div>
+<div class="col-8 font-14">
+  ${item.materials && item.materials.length > 0
+      ? item.materials.map((m, index) => `
+        <div class="mb-2">
+          <strong>${index + 1}. ${m.name}</strong>
+          ${m.avv ? `<div class="ms-3">AVV \\ UN No: ${m.avv}</div>` : ''}
+          ${m.quantity ? `<div class="ms-3">Quantity: ${m.quantity} ${item.unit || 'kg'}</div>` : ''}
+          ${m.price ? `<div class="ms-3">Price: ${m.price}</div>` : ''}
+          ${m.note ? `<div class="ms-3">Note: ${m.note}</div>` : ''}
+        </div>
+      `).join("")
+      : "-"
+    }
+  ${item.materials && item.materials.length > 0
+      ? `<div class="mt-2"><strong>Total Quantity: ${item.quantity} ${item.unit || 'kg'}</strong></div>`
+      : ''
+    }
+</div>
     <div class="row mt-2">
       <div class="col-4 font-500 font-16">Quantity:</div>
       <div class="col-8 font-14">${item.quantity} ${item.unit}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Quantity:</div>
+      <div class="col-8 font-14">${item.quantity} ${item.unit}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Transport:</div>
+      <div class="col-8 font-14">${item.transport}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Invoicing Type:</div>
+      <div class="col-8 font-14">${item.invoicingType}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Packing List:</div>
+      <div class="col-8 font-14">${item.packingList}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Delivery Address:</div>
+      <div class="col-8 font-14">${item.deliveryAddress}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Contact Person:</div>
+      <div class="col-8 font-14">${item.contactPerson}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4 font-500 font-16">Comments:</div>
+      <div class="col-8 font-14">${item.comment}</div>
     </div>
     
   `;

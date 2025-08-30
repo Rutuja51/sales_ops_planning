@@ -248,7 +248,19 @@ section h2::after {
 .table tbody tr:hover {
     background-color: #a3cbf3;
 }
+.form-check-input:checked {
+    background-color: var(--navy-blue) !important;
+    border-color: var(--navy-blue) !important;
+}
+.form-select option {
+  background-color: #ffffff !important; /* white */
+  color: #000;
+}
 
+.form-select option:hover {
+  background-color: var(--navy-blue) !important; /* blue on hover */
+  color: #fff;
+}
 .scrollable-cell {
     max-width: 200px;
     /* Visible column width */
