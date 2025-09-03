@@ -41,7 +41,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-navy sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy fixed-top">
         <div class="container">
             <a class="navbar-brand font-28 text-light">S & Ops <span class="text-white">Planner</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -69,13 +69,13 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container" style="padding-top: 100px; padding-bottom: 40px;">
         <div class="page-header">
             <h3>Plan Order</h3>
            <!-- <p class="text-muted">Fill out the form below to schedule a new event</p>-->
         </div>
         
-        <div class="form-container">
+        <div class="form-container" >
             <form id="schedule-form">
                 <div class="mb-3">
                     <label for="event-title" class="form-label">Order No *</label>
@@ -111,7 +111,32 @@
                         <option value="outbound">Outbound</option>
                     </select>
                 </div>
-                
+                <!-- Document checkboxes section -->
+                <div class="mb-3">
+                    <label class="form-label required-label">Required Documents</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-row">
+                            <div class="form-check">
+                                <input class="form-check-input document-checkbox" type="checkbox" id="begleitschein-checkbox" required>
+                                <label class="form-check-label" for="begleitschein-checkbox">
+                                    Begleitschein
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input document-checkbox" type="checkbox" id="entsorgungsnachweis-checkbox" required>
+                                <label class="form-check-label" for="entsorgungsnachweis-checkbox">
+                                    Entsorgungsnachweis
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input document-checkbox" type="checkbox" id="lieferschein-checkbox" required>
+                            <label class="form-check-label" for="lieferschein-checkbox">
+                                Lieferschein
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-actions">
                     <a href="order_plan.html" class="btn btn-secondary">Back to Calendar</a>
                     <button type="submit" class="btn btn-primary view-btn">Schedule Event</button>

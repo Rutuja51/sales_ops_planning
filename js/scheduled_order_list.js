@@ -61,6 +61,10 @@ function reverseItem(index) {
     if (data.order_id === obj.order_id) {
       order_data[ind].rescheduled = false;
       order_data[ind].scheduled = false;
+      order_data[ind].begleitschein = false;
+      order_data[ind].entsorgungsnachweis = false;
+      order_data[ind].lieferschein = false;
+
     }
     localStorage.setItem('order_data', JSON.stringify(order_data));
   })
